@@ -1,3 +1,4 @@
+require('dotenv').config();
 const cheerio = require('cheerio');
 const url = 'https://my.te.eg/echannel/#/accountoverview';
 const puppeteer = require('puppeteer');
@@ -6,12 +7,14 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const User = require('./models/User');
 const cron = require('node-cron');
-
-// Connect to MongoDB
-mongoose.connect('mongodb://localhost:27017/we', {
+const uri = "mongodb+srv://abdokhater269:<db_password>@cluster0.f9rn9sl.mongodb.net "
+// Connect to MongoDB Atlas using environment variable
+mongoose.connect("mongodb+srv://abdokhater269:Abdo6512746*@cluster0.f9rn9sl.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-});
+})
+.then(() => console.log("Successfully connected to MongoDB Atlas"))
+.catch(err => console.error("Connection error", err));
 
 const app = express();
 
@@ -100,8 +103,8 @@ app.post('/', async (req, res) => {
     });
 
     await user.save();
-  res.json({
-     data2, // Include the extracted span texts in the response
+    res.json({
+      data2, // Include the extracted span texts in the response
     });
 
     await browser.close();
